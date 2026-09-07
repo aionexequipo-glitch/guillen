@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asignar Alumno - Sleep Reset MRB | BioBodhiSattvas</title>
+
+  <!-- Tipografías Oficiales (Poppins & Lora) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;1,500;1,600&display=swap" rel="stylesheet">
+
+  <!-- Estilos Modulares -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/activar.css">
+</head>
+<body class="activation-page">
+
+  <div class="activation-card fade-in-up">
+    <div class="activation-header">
+      <span class="brand-badge">BioBodhiSattvas • Acceso Exclusivo</span>
+      <div class="pill-eyebrow" style="margin-bottom: 8px;">
+        <span class="dot"></span>
+        <span>¡Pago Aprobado con Éxito!</span>
+      </div>
+      <h1 class="activation-title">Habilitar Acceso a Skool</h1>
+      <p class="activation-desc">
+        Ingresá los datos de la persona que tomará el curso <strong>Sleep Reset MRB</strong> para activar su acceso inmediato a la comunidad privada.
+      </p>
+    </div>
+
+    <!-- Badge identificador de transacción -->
+    <div class="tx-badge-brand">
+      Transacción: <strong id="tx-display">Detectando código...</strong>
+    </div>
+
+    <form id="student-form">
+      <input type="hidden" id="transaction_id" name="transaction_id" value="">
+
+      <div class="form-group">
+        <label for="student_name" class="form-label">Nombre completo del Alumno:</label>
+        <input type="text" id="student_name" name="student_name" class="form-input" placeholder="Ej: Juan Pérez" required>
+      </div>
+
+      <div class="form-group">
+        <label for="student_email" class="form-label">Email del Alumno (para acceso a Skool):</label>
+        <input type="email" id="student_email" name="student_email" class="form-input" placeholder="alumno@correo.com" required>
+      </div>
+
+      <button type="submit" id="btn-submit" class="btn-primary">
+        Activar Acceso en Skool
+      </button>
+    </form>
+
+    <div id="status-message" class="status-box" style="display: none;"></div>
+  </div>
+
+  <!-- Lógica y automatización original preservada intacta -->
+  <script>
+    // 1. Capturar ID de transacción de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const transaction = urlParams.get('transaction') || 'TEST-MANUAL-' + Date.now();
+
+    document.getElementById('tx-display').textContent = transaction;
+    document.getElementById('transaction_id').value = transaction;
+
+    const form = document.getElementById('student-form');
+    const statusDiv = document.getElementById('status-message');
+    const submitBtn = document.getElementById('btn-submit');
+
+    const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/fqmfko9hjnf13fn7i6ruusiy32r28f44';
+
+    // Función de envío con reintentos y retardo progresivo
+    async function enviarConReintentos(payload, maxIntentos = 3, esperaMs = 3000) {
+      for (let intento = 1; intento <= maxIntentos; intento++) {
+        try {
+          if (intento === 1) {
+            submitBtn.textContent = 'Procesando activación...';
+          } else {
+            submitBtn.textContent = `Sincronizando pago (intento ${intento} de ${maxIntentos})...`;
+          }
+
+          const response = await fetch(MAKE_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            return true; // Petición recibida con éxito por Make
+          }
+
+          console.warn(`Intento ${intento} respondió con estado: ${response.status}`);
+        } catch (err) {
+          console.warn(`Error de red en intento ${intento}:`, err);
+        }
+
+        // Si falló y aún quedan intentos, espera antes del siguiente
+        if (intento < maxIntentos) {
+          await new Promise(resolve => setTimeout(resolve, esperaMs));
+        }
+      }
+      return false; // Se agotaron los reintentos
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      statusDiv.style.display = 'none';
+
+      // Se envían aliases (customer_name y student_name) para compatibilidad total con Make
+      const payload = {
+        order_id: document.getElementById('transaction_id').value.trim(),
+        customer_name: document.getElementById('student_name').value.trim(),
+        customer_email: document.getElementById('student_email').value.trim(),
+        student_name: document.getElementById('student_name').value.trim(),
+        student_email: document.getElementById('student_email').value.trim(),
+        course_id: "9a19a0fda8904eb18802142e9a2e3047",
+        amount: 97.00,
+        timestamp: new Date().toISOString()
+      };
+
+      const exito = await enviarConReintentos(payload, 3, 3000);
+
+      if (exito) {
+        form.style.display = 'none';
+        statusDiv.className = 'status-box success animate-pop-in';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '✅ ¡Acceso asignado con éxito!<br>Revisá la bandeja de entrada para ingresar a Skool.';
+      } else {
+        statusDiv.className = 'status-box error animate-pop-in';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = 'Hubo un inconveniente al conectar con el servidor.<br>Aguardá unos segundos y volvé a intentarlo.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Activar Acceso en Skool';
+      }
+    });
+  </script>
+
+</body>
+</html>

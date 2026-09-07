@@ -1,0 +1,77 @@
+/* ==========================================================================
+   ACTIVAR.CSS - Estilos Específicos para la Pantalla de Activación Post-Pago
+   ========================================================================== */
+
+body.activation-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+  background:
+    radial-gradient(ellipse 700px 400px at 50% 20%, rgba(5, 192, 140, 0.12), transparent 70%),
+    var(--bg);
+}
+
+.activation-card {
+  max-width: 500px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--r-card);
+  padding: 40px 36px;
+  box-shadow: var(--shadow-card), 0 0 40px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.activation-header {
+  margin-bottom: 24px;
+}
+
+.activation-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--white);
+  margin: 12px 0 6px;
+}
+
+.activation-desc {
+  font-size: 14.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.tx-badge-brand {
+  background: #071613;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--r-chip);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--teal-glow);
+  text-align: center;
+  margin-bottom: 24px;
+  word-break: break-all;
+  font-family: var(--font-display);
+}
+
+.tx-badge-brand strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.activation-card .btn-primary {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 10px;
+}
+
+.brand-badge {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--teal-glow);
+  margin-bottom: 8px;
+  display: block;
+}
