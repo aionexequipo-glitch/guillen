@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activar Acceso — Sleep Reset MRB | BioBodhiSattvas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;1,500;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/activar.css">
+</head>
+<body class="activation-page">
+
+  <!-- Barra de progreso de scroll -->
+  <div class="scroll-progress-bar" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Orbs ambientales de fondo -->
+  <div class="activation-ambient" aria-hidden="true">
+    <div class="act-orb act-orb-1"></div>
+    <div class="act-orb act-orb-2"></div>
+  </div>
+
+  <div class="activation-card">
+
+    <!-- Logo -->
+    <div class="activation-logo-wrap" data-reveal data-reveal-delay="0">
+      <img
+        src="Logo-principal%201x.png"
+        srcset="Logo-principal%201x.png 1x, Logo-principal2x.png 2x"
+        alt="BioBodhiSattvas"
+        class="activation-logo"
+        height="34"
+      >
+    </div>
+
+    <!-- Línea divisora con gradiente -->
+    <div class="activation-divider" aria-hidden="true" data-reveal data-reveal-delay="80"></div>
+
+    <div class="activation-header">
+      <!-- Ícono de éxito -->
+      <div class="activation-success-icon" aria-hidden="true" data-reveal data-reveal-delay="160">✓</div>
+
+      <div class="pill-eyebrow" style="margin: 0 auto 14px;" data-reveal data-reveal-delay="240">
+        <span class="dot pulse-dot"></span>
+        <span>¡Pago Aprobado con Éxito!</span>
+      </div>
+
+      <h1 class="activation-title" data-reveal data-reveal-delay="310">Habilitar Acceso a Skool</h1>
+      <p class="activation-desc" data-reveal data-reveal-delay="380">
+        Ingresá los datos de la persona que tomará el curso <strong>Sleep Reset MRB</strong> para activar su acceso inmediato a la comunidad privada.
+      </p>
+    </div>
+
+    <!-- Badge de transacción -->
+    <div class="tx-badge-brand" data-reveal data-reveal-delay="460">
+      <span class="tx-label">Transacción:</span>
+      <strong id="tx-display">Detectando código...</strong>
+    </div>
+
+    <form id="student-form">
+      <input type="hidden" id="transaction_id" name="transaction_id" value="">
+
+      <div class="form-group" data-reveal data-reveal-delay="530">
+        <label for="student_name" class="form-label">Nombre completo del Alumno:</label>
+        <input type="text" id="student_name" name="student_name" class="form-input" placeholder="Ej: Juan Pérez" required>
+      </div>
+
+      <div class="form-group" data-reveal data-reveal-delay="590">
+        <label for="student_email" class="form-label">Email del Alumno (para acceso a Skool):</label>
+        <input type="email" id="student_email" name="student_email" class="form-input" placeholder="alumno@correo.com" required>
+      </div>
+
+      <div data-reveal data-reveal-delay="650">
+        <button type="submit" id="btn-submit" class="btn-primary activation-btn">
+          <span id="btn-label">Activar Acceso en Skool</span>
+          <span class="arrow" id="btn-arrow">→</span>
+        </button>
+      </div>
+    </form>
+
+    <div id="status-message" class="status-box" style="display: none;"></div>
+
+    <p class="activation-security" data-reveal data-reveal-delay="720">🔒 Acceso procesado de forma segura vía Hotmart</p>
+  </div>
+
+  <script>
+    // Capturar ID de transacción de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const transaction = urlParams.get('transaction') || 'TEST-MANUAL-' + Date.now();
+
+    document.getElementById('tx-display').textContent = transaction;
+    document.getElementById('transaction_id').value = transaction;
+
+    const form = document.getElementById('student-form');
+    const statusDiv = document.getElementById('status-message');
+    const submitBtn = document.getElementById('btn-submit');
+    const btnLabel = document.getElementById('btn-label');
+    const btnArrow = document.getElementById('btn-arrow');
+
+    const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/fqmfko9hjnf13fn7i6ruusiy32r28f44';
+
+    // Función de envío con reintentos y retardo progresivo
+    async function enviarConReintentos(payload, maxIntentos = 3, esperaMs = 3000) {
+      for (let intento = 1; intento <= maxIntentos; intento++) {
+        try {
+          if (intento === 1) {
+            btnLabel.textContent = 'Procesando activación...';
+            btnArrow.style.display = 'none';
+          } else {
+            btnLabel.textContent = `Sincronizando pago (intento ${intento} de ${maxIntentos})...`;
+          }
+
+          const response = await fetch(MAKE_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            return true;
+          }
+
+          console.warn(`Intento ${intento} respondió con estado: ${response.status}`);
+        } catch (err) {
+          console.warn(`Error de red en intento ${intento}:`, err);
+        }
+
+        if (intento < maxIntentos) {
+          await new Promise(resolve => setTimeout(resolve, esperaMs));
+        }
+      }
+      return false;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      statusDiv.style.display = 'none';
+
+      // Se envían aliases (customer_name y student_name) para compatibilidad total con Make
+      const payload = {
+        order_id: document.getElementById('transaction_id').value.trim(),
+        customer_name: document.getElementById('student_name').value.trim(),
+        customer_email: document.getElementById('student_email').value.trim(),
+        student_name: document.getElementById('student_name').value.trim(),
+        student_email: document.getElementById('student_email').value.trim(),
+        course_id: "9a19a0fda8904eb18802142e9a2e3047",
+        amount: 97.00,
+        timestamp: new Date().toISOString()
+      };
+
+      const exito = await enviarConReintentos(payload, 3, 3000);
+
+      if (exito) {
+        form.style.display = 'none';
+        statusDiv.className = 'status-box success animate-pop-in';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '✅ <strong>¡Acceso asignado con éxito!</strong><br>Revisá la bandeja de entrada para ingresar a Skool.';
+      } else {
+        statusDiv.className = 'status-box error animate-pop-in';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = 'Hubo un inconveniente al conectar con el servidor.<br>Aguardá unos segundos y volvé a intentarlo.';
+        submitBtn.disabled = false;
+        btnLabel.textContent = 'Activar Acceso en Skool';
+        btnArrow.style.display = '';
+      }
+    });
+  </script>
+
+  <!-- Botón volver arriba -->
+  <button class="back-to-top" id="backToTop" aria-label="Volver al inicio">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script src="js/scroll-reveal.js" defer></script>
+  <script>
+    (function () {
+      const bar = document.getElementById('scrollProgress');
+      const btn = document.getElementById('backToTop');
+
+      window.addEventListener('scroll', function () {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+        btn.classList.toggle('visible', scrolled > 420);
+      }, { passive: true });
+
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+</body>
+</html>

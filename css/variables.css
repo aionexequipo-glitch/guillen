@@ -1,0 +1,63 @@
+:root {
+  /* === Paleta corporativa oficial (BioBodhiSattvas) === */
+  --ink: #1D1D1B;
+  --paper: #F5F5F5;
+  --teal: #00AF9A;
+  --teal-deep: #1F5555;
+
+  /* === Paleta funcional / Web Dark Medical === */
+  --bg: #0B1C19;
+  --bg-nav: #0D1F1C;
+  --bg-dark: #071311;
+  --surface: #102621;
+  --surface-2: #152E29;
+  --surface-border: rgba(0, 175, 154, 0.18);
+  --surface-border-strong: rgba(57, 224, 184, 0.28);
+  --teal-bright: #05C08C;
+  --teal-glow: #39E0B8;
+  --white: #FFFFFF;
+  --off-white: #E8F0EE;
+  --muted: #7B8886;
+  --muted-onlight: #5B6B67;
+  --error: #F87171;
+  --success: #4ADE80;
+
+  /* === Tipografía === */
+  --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-accent: 'Lora', Georgia, serif;
+
+  /* === Radios === */
+  --r-pill: 999px;
+  --r-card: 20px;
+  --r-card-lg: 28px;
+  --r-chip: 12px;
+
+  /* === Sombras y Brillos === */
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 28px 80px rgba(0, 0, 0, 0.55);
+  --glow-btn: 0 0 40px rgba(5, 192, 140, 0.45);
+  --glow-btn-hover: 0 0 56px rgba(5, 192, 140, 0.7);
+  --glow-subtle: 0 0 24px rgba(5, 192, 140, 0.18);
+  --glow-card: 0 0 50px rgba(5, 192, 140, 0.12);
+
+  /* === Glassmorphism === */
+  --glass-bg: rgba(16, 38, 33, 0.55);
+  --glass-blur: blur(16px);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* === Transiciones === */
+  --transition-base: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* === Espaciado y Layout === */
+  --max-w-content: 1060px;
+  --max-w-narrow: 640px;
+  --section-py: 96px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --section-py: 64px;
+  }
+}

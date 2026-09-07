@@ -1,0 +1,514 @@
+/* ==========================================================================
+   LANDING.CSS — Secciones específicas de index.html (BioBodhiSattvas)
+   ========================================================================== */
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--teal-bright), var(--teal-glow));
+  z-index: 200;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(57, 224, 184, 0.6);
+}
+
+/* ============================================================
+   BACK TO TOP BUTTON
+   ============================================================ */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 28px;
+  z-index: 150;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(16, 38, 33, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border-strong);
+  color: var(--teal-glow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+  pointer-events: none;
+  transition:
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  border-color: var(--teal-glow);
+  box-shadow: 0 0 20px rgba(57, 224, 184, 0.35), 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px) scale(1);
+}
+
+@media (max-width: 640px) {
+  .back-to-top {
+    bottom: 20px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ============================================================
+   HEADER / NAV
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 28, 25, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 14px 0;
+  transition: background var(--transition-base);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo en header */
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
+  /* Ajuste de brillo si el logo es oscuro sobre fondo oscuro.
+     Activar si el logo es de tinta oscura:
+     filter: brightness(0) invert(1); */
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero-section {
+  padding: 100px 0 110px;
+  text-align: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Orbs de luz ambiental */
+.hero-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.orb-1 {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(5, 192, 140, 0.17) 0%, transparent 70%);
+  top: -280px;
+  left: calc(50% - 350px);
+  animation: orbFloat 9s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(0, 175, 154, 0.10) 0%, transparent 70%);
+  bottom: 40px;
+  right: -120px;
+  animation: orbFloat 11s ease-in-out infinite 2.5s;
+}
+
+.orb-3 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(57, 224, 184, 0.07) 0%, transparent 70%);
+  bottom: 60px;
+  left: -60px;
+  animation: orbFloat 13s ease-in-out infinite 5s;
+}
+
+/* Grid técnico decorativo */
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(57, 224, 184, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 224, 184, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fade out del grid en los bordes */
+.hero-grid-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, var(--bg) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Hero Headline — tipografía de impacto */
+.hero-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.hero-brand-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(44px, 7.5vw, 78px);
+  letter-spacing: -2.5px;
+  line-height: 1;
+  background: linear-gradient(140deg, #FFFFFF 35%, var(--teal-glow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(17px, 2.4vw, 23px);
+  color: #A8C0BC;
+  letter-spacing: 0;
+  display: block;
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.free-anchor {
+  font-size: 13.5px;
+  color: var(--teal-glow);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: 0.8;
+  transition: opacity var(--transition-base);
+}
+
+.free-anchor:hover {
+  opacity: 1;
+}
+
+/* Logo central del hero */
+.hero-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.hero-logo {
+  height: 150px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 18px rgba(57, 224, 184, 0.25));
+  /* Si el logo es de tinta oscura sobre fondo oscuro, descomentar:
+     filter: brightness(0) invert(1) drop-shadow(0 0 18px rgba(57, 224, 184, 0.25)); */
+}
+
+.hero-mockup-wrap {
+  max-width: 720px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* ============================================================
+   SECCIÓN DARK (Síntomas)
+   ============================================================ */
+.section-dark {
+  background: var(--bg-dark);
+  background-image: radial-gradient(ellipse 700px 500px at 50% 60%, rgba(31, 85, 85, 0.18), transparent 70%);
+}
+
+/* ============================================================
+   SECCIÓN MÉTODO
+   ============================================================ */
+.section-method {
+  background: var(--bg);
+  background-image: radial-gradient(ellipse 600px 400px at 80% 30%, rgba(5, 140, 120, 0.07), transparent 65%);
+}
+
+/* ============================================================
+   SECCIÓN MÓDULOS
+   ============================================================ */
+.section-modules {
+  background: var(--bg);
+}
+
+/* ============================================================
+   SECCIÓN TESTIMONIOS
+   ============================================================ */
+.section-testimonials {
+  background: var(--bg-dark);
+  background-image: radial-gradient(ellipse 500px 350px at 50% 50%, rgba(5, 192, 140, 0.07), transparent 65%);
+}
+
+/* ============================================================
+   SECCIÓN LEAD MAGNET
+   ============================================================ */
+.section-lead {
+  background: var(--bg);
+}
+
+.lead-magnet-card {
+  background: linear-gradient(180deg, rgba(16, 38, 33, 0.96) 0%, rgba(11, 28, 25, 0.96) 100%);
+  border: 1px solid var(--teal-bright);
+  box-shadow: 0 0 60px rgba(5, 192, 140, 0.18), var(--shadow-card);
+  border-radius: var(--r-card-lg);
+  padding: 52px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.lead-magnet-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--teal-glow) 50%, transparent 100%);
+}
+
+.lead-form {
+  max-width: 480px;
+  margin: 30px auto 0;
+}
+
+/* ============================================================
+   SECCIÓN PRICING
+   ============================================================ */
+.section-pricing {
+  background: var(--bg-dark);
+  background-image: radial-gradient(ellipse 600px 500px at 50% 40%, rgba(5, 192, 140, 0.09), transparent 65%);
+}
+
+.pricing-wrapper {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.price-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(5, 192, 140, 0.35);
+  border-radius: var(--r-card-lg);
+  padding: 44px 36px;
+  box-shadow: var(--shadow-card), 0 0 50px rgba(5, 192, 140, 0.18), var(--glass-inset);
+  position: relative;
+  overflow: hidden;
+}
+
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--teal-glow) 50%, transparent 100%);
+}
+
+.price-box {
+  margin: 24px 0;
+  border-top: 1px solid var(--surface-border);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 22px 0;
+}
+
+.price-value {
+  font-size: 58px;
+  font-weight: 900;
+  color: var(--white);
+  font-family: var(--font-display);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.price-currency {
+  font-size: 18px;
+  color: var(--teal-glow);
+  font-weight: 600;
+  margin-left: 6px;
+  letter-spacing: 0;
+}
+
+.security-note {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 18px;
+  letter-spacing: 0.2px;
+}
+
+/* ============================================================
+   SECCIÓN FAQ
+   ============================================================ */
+.section-faq {
+  background: var(--bg);
+}
+
+/* ============================================================
+   GRID LAYOUTS
+   ============================================================ */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 40px;
+}
+
+@media (max-width: 900px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  padding: 64px 0 80px;
+  background: #050F0D;
+  border-top: 1px solid var(--surface-border);
+  text-align: center;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-logo-wrap {
+  margin-bottom: 12px;
+}
+
+.footer-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  opacity: 0.7;
+  transition: opacity var(--transition-base);
+  /* Si el logo es oscuro, descomentar:
+     filter: brightness(0) invert(1); */
+}
+
+.footer-logo:hover {
+  opacity: 1;
+}
+
+.footer-disclaimer {
+  font-size: 12.5px;
+  color: var(--muted);
+  max-width: 580px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.footer-copy {
+  margin-top: 18px;
+  color: #364340;
+  font-size: 12.5px;
+  font-family: var(--font-display);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 72px 0 80px;
+  }
+
+  .hero-brand-name {
+    letter-spacing: -1.5px;
+  }
+
+  .lead-magnet-card {
+    padding: 36px 24px;
+  }
+
+  .price-card {
+    padding: 32px 24px;
+  }
+
+  .price-value {
+    font-size: 48px;
+  }
+
+  .logo-img {
+    height: 28px;
+  }
+
+  .footer-logo {
+    height: 32px;
+  }
+}

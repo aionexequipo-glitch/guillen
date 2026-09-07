@@ -1,0 +1,266 @@
+/* ==========================================================================
+   ACTIVAR.CSS — Pantalla de Activación Post-Pago (BioBodhiSattvas)
+   ========================================================================== */
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--teal-bright), var(--teal-glow));
+  z-index: 200;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(57, 224, 184, 0.6);
+}
+
+/* ============================================================
+   BACK TO TOP BUTTON
+   ============================================================ */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 28px;
+  z-index: 150;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(16, 38, 33, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border-strong);
+  color: var(--teal-glow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+  pointer-events: none;
+  transition:
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  border-color: var(--teal-glow);
+  box-shadow: 0 0 20px rgba(57, 224, 184, 0.35), 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px) scale(1);
+}
+
+@media (max-width: 640px) {
+  .back-to-top {
+    bottom: 20px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ============================================================
+   PAGE LAYOUT
+   ============================================================ */
+body.activation-page {
+  min-height: 100vh;
+  padding: 80px 20px 100px;
+  background: var(--bg-dark);
+  position: relative;
+  display: block;
+}
+
+/* === Orbs ambientales === */
+.activation-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.act-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.act-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(5, 192, 140, 0.14) 0%, transparent 70%);
+  top: -200px;
+  left: calc(50% - 300px);
+  animation: orbFloat 9s ease-in-out infinite;
+}
+
+.act-orb-2 {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(0, 175, 154, 0.09) 0%, transparent 70%);
+  bottom: -100px;
+  right: -80px;
+  animation: orbFloat 12s ease-in-out infinite 3s;
+}
+
+/* === Card principal === */
+.activation-card {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--r-card-lg);
+  padding: 44px 40px;
+  box-shadow: var(--shadow-card), 0 0 60px rgba(0, 0, 0, 0.5), var(--glass-inset);
+  text-align: center;
+}
+
+/* Shimmer line en el borde superior */
+.activation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--teal-glow) 50%, transparent 100%);
+  border-radius: var(--r-card-lg) var(--r-card-lg) 0 0;
+}
+
+/* === Logo en la card === */
+.activation-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.activation-logo {
+  height: 34px;
+  width: auto;
+  display: block;
+  /* Si el logo es oscuro sobre fondo oscuro, descomentar:
+     filter: brightness(0) invert(1); */
+}
+
+/* === Línea divisora decorativa === */
+.activation-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--surface-border-strong) 50%, transparent 100%);
+  margin-bottom: 24px;
+}
+
+/* === Ícono de éxito === */
+.activation-success-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(5, 192, 140, 0.12);
+  border: 1.5px solid rgba(5, 192, 140, 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--teal-glow);
+  margin: 0 auto 18px;
+  box-shadow: 0 0 24px rgba(5, 192, 140, 0.2);
+}
+
+/* === Header de activación === */
+.activation-header {
+  margin-bottom: 24px;
+}
+
+.activation-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--white);
+  margin: 10px 0 8px;
+  letter-spacing: -0.4px;
+}
+
+.activation-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.activation-desc strong {
+  color: var(--off-white);
+  font-weight: 600;
+}
+
+/* === Badge de transacción === */
+.tx-badge-brand {
+  background: rgba(5, 13, 11, 0.7);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--r-chip);
+  padding: 11px 16px;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 24px;
+  word-break: break-all;
+  font-family: var(--font-display);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tx-label {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.tx-badge-brand strong {
+  color: var(--teal-glow);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* === Botón de activación === */
+.activation-btn {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 12px;
+}
+
+/* === Nota de seguridad === */
+.activation-security {
+  font-size: 12px;
+  color: #3E5450;
+  margin-top: 20px;
+  letter-spacing: 0.2px;
+}
+
+/* === Responsive === */
+@media (max-width: 540px) {
+  .activation-card {
+    padding: 36px 24px;
+  }
+
+  .activation-title {
+    font-size: 21px;
+  }
+
+  .activation-logo {
+    height: 28px;
+  }
+}
