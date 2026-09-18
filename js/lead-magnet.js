@@ -4,7 +4,7 @@
  * Conexión con el endpoint de Google Apps Script
  */
 
-const APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycby_ntO4qJozW7KGJhfQWEeu4euaJBZf3wtucfa1Y1gJVvQla-gXOtn2y-mgr4U37yxXxw/exec';
+const APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyycWcVfFNTJaihLJHPveXcDyMdYSv1LONqt8xlUhK3Il93A5rEVB3wIgJouOgb69k/exec';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('lead-magnet-form');
