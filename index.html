@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,500;1,500;1,600&display=swap" rel="stylesheet">
 
+  <!-- Preload del poster del VSL para vista previa instantánea -->
+  <link rel="preload" as="image" href="vsl-guille-poster.jpg">
+
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -73,15 +76,24 @@
       <!-- ==== VSL PRINCIPAL ==== -->
       <div class="vsl-wrap" data-reveal data-reveal-delay="280">
         <div class="vsl-frame" role="region" aria-label="Video de presentación del protocolo MRB Sleep Reset">
-          <div class="vsl-placeholder">
-            <div class="vsl-play-btn" aria-hidden="true">
+          <video
+            class="vsl-video"
+            id="vsl-video"
+            src="vsl-guille.mp4"
+            poster="vsl-guille-poster.jpg"
+            preload="metadata"
+            controls
+            playsinline
+          ></video>
+          <button type="button" class="vsl-placeholder" id="vsl-play-trigger" aria-label="Reproducir video">
+            <span class="vsl-play-btn" aria-hidden="true">
               <svg width="26" height="30" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M25 15L0.25 29.2894L0.25 0.710581L25 15Z" fill="currentColor"/>
               </svg>
-            </div>
-            <div class="vsl-caption">[ VSL — insertar video aquí ]</div>
-            <div class="vsl-sub">Descubrí cómo funciona el protocolo en 7 minutos.</div>
-          </div>
+            </span>
+            <span class="vsl-caption">Ver el protocolo</span>
+            <span class="vsl-sub">Descubrí cómo funciona el protocolo en 7 minutos.</span>
+          </button>
           <div class="vsl-glow" aria-hidden="true"></div>
         </div>
       </div>
@@ -382,12 +394,38 @@
   <!-- ==================== MÉTODO / CREDIBILIDAD ==================== -->
   <section class="section-method section-author">
     <div class="wrap">
-      <div class="card-brand author-card" data-reveal>
-        <div class="kicker" style="color: var(--teal);">MÉTODO CREADO POR</div>
-        <h3 class="author-name">Dr. Guillermo Petrini · BioBodhiSattvas</h3>
-        <p class="desc-text" style="margin: 12px auto 20px; max-width: 520px;">
-          Método desarrollado desde la clínica: neurofisiología del sueño aplicada al sistema nervioso adulto sobrecargado. No es teoría — es lo que funcionó con pacientes que ya habían probado todo.
-        </p>
+      <div class="card-brand author-card author-bio" data-reveal>
+        <div class="author-media" data-reveal data-reveal-delay="80">
+          <div class="author-portrait-wrap">
+            <img
+              src="perfil4.png"
+              alt="Dr. Guillermo Petrini — fundador de BioBodhiSattvas"
+              class="author-portrait"
+              loading="lazy"
+              decoding="async"
+            >
+            <div class="author-portrait-glow" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="author-content" data-reveal data-reveal-delay="160">
+          <div class="kicker" style="color: var(--teal);">MÉTODO CREADO POR</div>
+          <h3 class="author-name">Dr. Guillermo Petrini</h3>
+          <p class="author-role">Fundador de BioBodhiSattvas · Neurofisiología aplicada al sueño</p>
+
+          <p class="author-text">
+            Después de años acompañando pacientes que no lograban dormir a pesar de haber probado pastillas, meditaciones y todo tipo de rutinas, Guillermo desarrolló <b>MRB Sleep Reset™</b>: un protocolo clínico basado en la regulación del sistema nervioso adulto sobrecargado.
+          </p>
+          <p class="author-text">
+            Su enfoque combina <b>neurofisiología del sueño</b>, prácticas de <b>autorregulación</b> y hábitos de <b>higiene circadiana</b> — traducido en pasos concretos, aplicables desde la primera noche, sin depender de fármacos ni de meditaciones eternas.
+          </p>
+
+          <ul class="author-highlights">
+            <li><span class="author-hl-icon">✓</span>Enfoque clínico, no motivacional</li>
+            <li><span class="author-hl-icon">✓</span>Protocolo probado con pacientes reales</li>
+            <li><span class="author-hl-icon">✓</span>Basado en evidencia neurofisiológica</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -648,6 +686,23 @@
       btn.addEventListener('click', function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+
+      // VSL nativo: click en el overlay reproduce el <video> con controles nativos
+      const vslTrigger = document.getElementById('vsl-play-trigger');
+      const vslVideo = document.getElementById('vsl-video');
+      const vslFrame = vslTrigger ? vslTrigger.closest('.vsl-frame') : null;
+      if (vslTrigger && vslVideo && vslFrame) {
+        const startPlayback = function () {
+          vslFrame.classList.add('vsl-playing');
+          const p = vslVideo.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(function () {
+              // Si el navegador bloquea el play, el usuario puede usar los controles nativos
+            });
+          }
+        };
+        vslTrigger.addEventListener('click', startPlayback);
+      }
 
       // Timeline: iluminar fases al entrar al viewport
       const phases = document.querySelectorAll('.protocol-phase');

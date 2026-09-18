@@ -1,0 +1,7 @@
+.vercel
+node_modules
+.DS_Store
+
+# Fuente original del VSL (no deployar el archivo pesado, se sirve vsl-guille.mp4)
+VSL GUILLE.mp4
+*.mov
