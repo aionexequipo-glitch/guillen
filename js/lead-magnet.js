@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
       form.style.display = 'none';
       mostrarMensaje(
-        `✅ <strong>¡Listo, ${nombre}!</strong><br>` +
+        `<strong>¡Listo, ${nombre}!</strong><br>` +
         `Te enviamos el <strong>Checklist de Emergencia</strong> a <strong>${email}</strong>.<br>` +
         `Revisá tu bandeja de entrada o spam en los próximos minutos.<br><br>` +
         `<a href="#" class="btn-primary" style="margin-top: 10px; display: inline-flex; max-width: 320px;" onclick="alert('Descargando archivo PDF...'); return false;">` +
